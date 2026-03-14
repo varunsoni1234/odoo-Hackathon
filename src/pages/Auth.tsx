@@ -69,7 +69,8 @@ export function AuthPage() {
   // ── VERIFY OTP + SET NEW PASSWORD ──
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault(); resetMessages(); setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "email" });
+    // Use type: 'magiclink' for OTPs sent via signInWithOtp
+    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "magiclink" });
     if (error) { setError("Invalid or expired OTP. Please try again."); setLoading(false); return; }
     setView("new_password");
     setLoading(false);
