@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Loader2, ArrowDownRight, ArrowUpRight, ArrowRightLeft, ClipboardList } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { cn } from "../lib/utils";
+import { useAuth } from "../providers/AuthProvider";
 import type { Operation, Item } from "../types/database";
 
 type OpWithRelations = Operation & {
@@ -31,6 +32,7 @@ export function MoveHistory() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("ALL");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const { profile } = useAuth();
 
   useEffect(() => { fetchHistory(); }, []);
 
@@ -52,11 +54,51 @@ export function MoveHistory() {
     return matchType && matchStatus && matchSearch;
   });
 
+  const downloadCSV = () => {
+    if (ops.length === 0) return;
+
+    const headers = ["Date", "Reference", "Type", "Status", "From", "To", "Items", "Notes"];
+    const rows = filtered.map(o => [
+      new Date(o.created_at).toLocaleString(),
+      o.reference || "Pending",
+      o.type,
+      o.status,
+      o.source_location?.name || "",
+      o.destination_location?.name || "",
+      o.operation_lines?.length || 0,
+      o.notes || ""
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `operation_audit_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Move History</h1>
-        <p className="text-foreground/50 mt-1 text-sm">Full audit ledger of all stock operations.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Move History</h1>
+          <p className="text-foreground/50 mt-1 text-sm">Full audit ledger of all stock operations.</p>
+        </div>
+        {profile?.role === 'manager' && (
+          <button 
+            onClick={downloadCSV}
+            className="px-4 py-2 rounded-xl border border-border bg-card text-sm font-semibold hover:bg-card-foreground/5 transition-all shadow-sm"
+          >
+            Download Audit
+          </button>
+        )}
       </div>
 
       {/* Filters */}

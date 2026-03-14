@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Search, Loader2, ArrowDownRight, ArrowUpRight, ArrowRightLeft } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import { useAuth } from "../providers/AuthProvider";
 import type { Movement, Item } from "../types/database";
 
 // Extended type to include joined item data
@@ -11,6 +12,7 @@ export function Movements() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const { profile } = useAuth();
   
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -186,12 +188,14 @@ export function Movements() {
           </p>
         </div>
         <div className="flex gap-3">
-          <button 
-            onClick={downloadCSV}
-            className="px-4 py-2 rounded-md border border-border bg-card text-sm font-medium hover:bg-card-foreground/5 transition-colors flex items-center"
-          >
-            Download Ledger
-          </button>
+          {profile?.role === 'manager' && (
+            <button 
+              onClick={downloadCSV}
+              className="px-4 py-2 rounded-md border border-border bg-card text-sm font-medium hover:bg-card-foreground/5 transition-colors flex items-center"
+            >
+              Download Ledger
+            </button>
+          )}
           <button 
             onClick={openAddModal}
             className="px-4 py-2 rounded-md bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 flex items-center"

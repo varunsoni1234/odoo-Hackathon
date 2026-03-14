@@ -28,6 +28,7 @@ const operationNav = [
 
 const reportNav = [
   { name: "Move History", href: "/history", icon: History },
+  { name: "Stock Ledger", href: "/movements", icon: ClipboardList },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
 ];
 

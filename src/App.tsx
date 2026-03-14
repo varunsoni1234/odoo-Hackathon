@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { AuthProvider } from "./providers/AuthProvider";
 import { AppLayout } from "./components/layout/AppLayout";
+import { Movements } from "./pages/Movements";
 
 // Auth
 import { AuthPage } from "./pages/Auth";
@@ -54,18 +55,17 @@ function App() {
 
               {/* Reports */}
               <Route path="history" element={<MoveHistory />} />
+              <Route path="movements" element={<Movements />} />
               <Route path="analytics" element={<Analytics />} />
 
               {/* Settings */}
               <Route path="settings/warehouses" element={<Warehouses />} />
-
 
               {/* Profile */}
               <Route path="profile" element={<Profile />} />
 
               {/* Legacy redirect */}
               <Route path="inventory" element={<Navigate to="/products" replace />} />
-              <Route path="movements" element={<Navigate to="/history" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>
