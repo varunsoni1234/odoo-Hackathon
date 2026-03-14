@@ -5,6 +5,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { AuthPage } from "./pages/Auth";
 import { Categories } from "./pages/Categories";
 import { Items } from "./pages/Items";
+import { Movements } from "./pages/Movements";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
             {/* Mock routes for other sections */}
             <Route path="inventory" element={<Items />} />
             <Route path="categories" element={<Categories />} />
-            <Route path="movements" element={<div className="p-8 text-xl font-medium animate-fade-in text-foreground/50">Stock Movements Center</div>} />
+            <Route path="movements" element={<Movements />} />
             <Route path="settings" element={<div className="p-8 text-xl font-medium animate-fade-in text-foreground/50">App Settings</div>} />
           </Route>
         </Routes>
