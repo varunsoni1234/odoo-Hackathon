@@ -125,7 +125,7 @@ export function Analytics() {
                     <div className="w-24 h-1.5 bg-card rounded-full mt-2 overflow-hidden">
                       <div 
                         className="h-full bg-brand-500 rounded-full" 
-                        style={{ width: `${(p.value / stats.totalValue) * 100}%` }}
+                        style={{ width: `${stats.totalValue > 0 ? (p.value / stats.totalValue) * 100 : 0}%` }}
                       />
                     </div>
                   </div>
