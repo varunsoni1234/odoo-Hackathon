@@ -22,6 +22,7 @@ import { StockAdjustments } from "./pages/operations/StockAdjustments";
 
 // Reports
 import { MoveHistory } from "./pages/MoveHistory";
+import { Analytics } from "./pages/Analytics";
 
 // Settings
 import { Warehouses } from "./pages/settings/Warehouses";
@@ -53,10 +54,11 @@ function App() {
 
               {/* Reports */}
               <Route path="history" element={<MoveHistory />} />
-              <Route path="analytics" element={<div className="p-8 text-foreground/50 text-xl font-medium">Analytics — Coming Soon</div>} />
+              <Route path="analytics" element={<Analytics />} />
 
               {/* Settings */}
               <Route path="settings/warehouses" element={<Warehouses />} />
+
 
               {/* Profile */}
               <Route path="profile" element={<Profile />} />

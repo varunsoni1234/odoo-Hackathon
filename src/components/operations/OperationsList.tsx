@@ -221,14 +221,23 @@ export function OperationsList({ opType, title, description, showSupplier = fals
 
       {/* Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card w-full max-w-2xl rounded-2xl shadow-2xl border border-border overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card w-full max-w-2xl rounded-2xl shadow-2xl border border-border flex flex-col max-h-[90vh]">
+            {/* Header - Fixed top */}
+            <div className="flex-none flex items-center justify-between px-6 py-5 border-b border-border">
               <h2 className="text-lg font-bold">New {title.replace(/s$/, "")}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-foreground/40 hover:text-foreground text-xl leading-none">&times;</button>
+              <button 
+                type="button"
+                onClick={() => setIsModalOpen(false)} 
+                className="text-foreground/40 hover:text-foreground text-xl leading-none rounded-full p-2 hover:bg-card-foreground/5 transition-colors"
+              >
+                &times;
+              </button>
             </div>
-            <form onSubmit={handleCreate} className="overflow-y-auto flex-1">
-              <div className="p-6 space-y-4">
+            
+            {/* Form - Scrollable middle + Fixed bottom actions */}
+            <form onSubmit={handleCreate} className="flex flex-col min-h-0 flex-1">
+              <div className="p-6 space-y-5 overflow-y-auto flex-1">
                 {showSupplier && (
                   <div>
                     <label className="block text-sm font-medium mb-1.5">Supplier</label>
@@ -283,14 +292,16 @@ export function OperationsList({ opType, title, description, showSupplier = fals
 
                 {/* Product Lines */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-semibold">Product Lines</label>
+                  <div className="flex items-center justify-between mb-3 border-t border-border/50 pt-4">
+                    <label className="block text-sm font-semibold text-foreground/80">Product Lines</label>
                     <button type="button" onClick={() => setLines([...lines, { item_id: "", expected_qty: 1 }])}
-                      className="text-xs text-brand-500 hover:text-brand-600 font-semibold">+ Add Line</button>
+                      className="text-xs bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 px-3 py-1.5 rounded-lg hover:bg-brand-100 dark:hover:bg-brand-500/20 font-semibold transition-colors flex items-center gap-1">
+                      <Plus className="h-3 w-3" /> Add Line
+                    </button>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {lines.map((line, i) => (
-                      <div key={i} className="flex gap-2">
+                      <div key={i} className="flex gap-2 items-start">
                         <select value={line.item_id} onChange={e => { const l = [...lines]; l[i].item_id = e.target.value; setLines(l); }}
                           className="flex-1 rounded-xl border border-border bg-background/50 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20">
                           <option value="">-- Select Product --</option>
@@ -299,18 +310,23 @@ export function OperationsList({ opType, title, description, showSupplier = fals
                         <input type="number" min="1" value={line.expected_qty} onChange={e => { const l = [...lines]; l[i].expected_qty = parseInt(e.target.value) || 1; setLines(l); }}
                           className="w-24 rounded-xl border border-border bg-background/50 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20" placeholder="Qty" />
                         {lines.length > 1 && (
-                          <button type="button" onClick={() => setLines(lines.filter((_, idx) => idx !== i))} className="px-2 text-rose-400 hover:text-rose-500">×</button>
+                          <button type="button" onClick={() => setLines(lines.filter((_, idx) => idx !== i))} 
+                            className="p-2.5 text-rose-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-colors shrink-0">
+                            &times;
+                          </button>
                         )}
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end gap-3 px-6 py-4 border-t border-border bg-card/50">
+              
+              {/* Footer Actions - Fixed bottom */}
+              <div className="flex-none flex justify-end gap-3 px-6 py-4 border-t border-border bg-card">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-sm font-medium rounded-xl hover:bg-card-foreground/5 transition-colors">Cancel</button>
-                <button type="submit" disabled={modalLoading} className="px-5 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2">
+                <button type="submit" disabled={modalLoading} className="px-5 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/25 disabled:opacity-50 flex items-center gap-2">
                   {modalLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-                  Create
+                  Create Record
                 </button>
               </div>
             </form>
