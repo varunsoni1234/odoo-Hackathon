@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   Package, AlertTriangle, TrendingUp, Truck, ArrowLeftRight,
   ClipboardList, Loader2, ArrowDownRight, ArrowUpRight,
-  CheckCircle2, Clock, XCircle, BarChart3
+  CheckCircle2, XCircle, BarChart3
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { cn } from "../../lib/utils";
@@ -142,7 +142,7 @@ export function ManagerDashboard() {
           <Link
             key={kpi.label}
             to={kpi.href}
-            className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300"
+            className="group relative overflow-hidden rounded-2xl bg-card border border-border hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20 transition-all duration-300 card-hover"
           >
             <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br", kpi.color)} style={{ opacity: 0 }} />
             <div className="relative p-5">
@@ -191,7 +191,7 @@ export function ManagerDashboard() {
               </div>
             ) : (
               filteredOps.map((op) => (
-                <div key={op.id} className="px-6 py-3.5 flex items-center gap-4 hover:bg-card-foreground/3 transition-colors">
+                <div key={op.id} className="px-6 py-3.5 flex items-center gap-4 hover:bg-card-foreground/3 card-hover transition-colors group cursor-default">
                   <div className="shrink-0">
                     <div className={cn("text-xs font-bold", OP_TYPE_LABELS[op.type]?.color)}>
                       {OP_TYPE_LABELS[op.type]?.label}
@@ -218,7 +218,7 @@ export function ManagerDashboard() {
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="rounded-2xl border border-border bg-card overflow-hidden">
+        <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-md">
           <div className="flex items-center justify-between px-6 py-4 border-b border-border/60">
             <h2 className="font-semibold text-sm flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-rose-500" />
@@ -236,9 +236,9 @@ export function ManagerDashboard() {
               </div>
             ) : (
               lowStockItems.map((item) => (
-                <div key={item.id} className="px-6 py-3 flex items-center justify-between gap-2">
+                <div key={item.id} className="px-6 py-3 flex items-center justify-between gap-2 hover:bg-rose-50/50 dark:hover:bg-rose-500/5 transition-colors group">
                   <div className="min-w-0">
-                    <div className="text-xs font-medium truncate">{item.name}</div>
+                    <div className="text-xs font-medium truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">{item.name}</div>
                     <div className="font-mono text-[10px] text-foreground/40">{item.sku}</div>
                   </div>
                   <div className="text-right shrink-0">
@@ -264,7 +264,7 @@ export function ManagerDashboard() {
           { label: "Completed Today", value: recentOps.filter(o => o.status === "DONE" && new Date(o.created_at).toDateString() === new Date().toDateString()).length, icon: CheckCircle2, color: "text-emerald-500" },
           { label: "Canceled/Blocked", value: recentOps.filter(o => o.status === "CANCELED").length, icon: XCircle, color: "text-rose-500" },
         ].map((item) => (
-          <div key={item.label} className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card">
+          <div key={item.label} className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card card-hover">
             <item.icon className={cn("h-8 w-8 shrink-0", item.color)} />
             <div>
               <div className="text-2xl font-bold">{item.value}</div>

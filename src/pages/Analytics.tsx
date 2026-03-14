@@ -66,7 +66,7 @@ export function Analytics() {
 
       {/* Primary KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass rounded-2xl p-6 border border-border shadow-lg">
+        <div className="glass rounded-2xl p-6 border border-border shadow-lg card-hover">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-500">
               <TrendingUp className="h-6 w-6" />
@@ -74,20 +74,20 @@ export function Analytics() {
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500">+4.2%</span>
           </div>
           <h3 className="text-foreground/50 text-sm font-medium mb-1">Total Inventory Value</h3>
-          <p className="text-3xl font-bold">${stats.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+          <p className="text-3xl font-bold text-emerald-500">${stats.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
         </div>
 
-        <div className="glass rounded-2xl p-6 border border-border shadow-lg">
+        <div className="glass rounded-2xl p-6 border border-border shadow-lg card-hover">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 rounded-xl bg-brand-500/10 text-brand-500">
               <Package className="h-6 w-6" />
             </div>
           </div>
           <h3 className="text-foreground/50 text-sm font-medium mb-1">Total Physical Items</h3>
-          <p className="text-3xl font-bold">{stats.totalItems.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-brand-500">{stats.totalItems.toLocaleString()}</p>
         </div>
 
-        <div className="glass rounded-2xl p-6 border border-border shadow-lg">
+        <div className="glass rounded-2xl p-6 border border-border shadow-lg card-hover">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 rounded-xl bg-purple-500/10 text-purple-500">
               <Activity className="h-6 w-6" />
@@ -95,13 +95,13 @@ export function Analytics() {
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500">This Month</span>
           </div>
           <h3 className="text-foreground/50 text-sm font-medium mb-1">Stock Movements</h3>
-          <p className="text-3xl font-bold">{stats.operationsThisMonth.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-purple-500">{stats.operationsThisMonth.toLocaleString()}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Products by Value */}
-        <div className="glass rounded-2xl border border-border overflow-hidden">
+        <div className="glass rounded-2xl border border-border overflow-hidden hover:shadow-xl transition-shadow duration-300">
           <div className="p-6 border-b border-border/50">
             <h3 className="text-lg font-bold flex items-center gap-2">
               <Layers className="h-5 w-5 text-brand-500" />
@@ -112,7 +112,7 @@ export function Analytics() {
           <div className="p-6">
             <div className="space-y-5">
               {stats.topProducts.map((p, i) => (
-                <div key={i} className="flex items-center gap-4">
+                <div key={i} className="flex items-center gap-4 card-hover p-2 rounded-xl">
                   <div className="h-10 w-10 shrink-0 rounded-xl bg-card border border-border flex items-center justify-center font-bold text-sm text-foreground/40">
                     {i + 1}
                   </div>
@@ -121,8 +121,8 @@ export function Analytics() {
                     <p className="text-xs text-foreground/50">{p.qty} in stock</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold">${p.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                    <div className="w-24 h-1.5 bg-card rounded-full mt-2 overflow-hidden">
+                    <p className="text-sm font-bold text-emerald-500">${p.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <div className="w-24 h-1.5 bg-card border border-border/50 rounded-full mt-2 overflow-hidden">
                       <div 
                         className="h-full bg-brand-500 rounded-full" 
                         style={{ width: `${stats.totalValue > 0 ? (p.value / stats.totalValue) * 100 : 0}%` }}

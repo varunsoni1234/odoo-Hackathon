@@ -183,7 +183,7 @@ export function OperationsList({ opType, title, description, showSupplier = fals
                 <tr><td colSpan={7} className="py-16 text-center text-foreground/40 text-sm">No {title.toLowerCase()} found.</td></tr>
               ) : (
                 filtered.map(op => (
-                  <tr key={op.id} className="hover:bg-card-foreground/3 transition-colors">
+                  <tr key={op.id} className="hover:bg-card-foreground/3 card-hover transition-colors">
                     <td className="px-5 py-3.5">
                       <button onClick={() => openDetail(op)} className="font-mono text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline">{op.reference || "Pending"}</button>
                     </td>
@@ -195,7 +195,7 @@ export function OperationsList({ opType, title, description, showSupplier = fals
                     {showDestLocation && <td className="px-5 py-3.5 text-sm text-foreground/70">{op.destination_location?.name || "-"}</td>}
                     <td className="px-5 py-3.5 text-xs text-foreground/40">{new Date(op.created_at).toLocaleDateString()}</td>
                     <td className="px-5 py-3.5 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-2 text-brand-500">
                         {op.status !== "DONE" && op.status !== "CANCELED" && (
                           <button onClick={() => handleValidate(op)} title="Validate" className="p-1.5 rounded-lg text-emerald-500 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-colors">
                             <CheckCircle className="h-4 w-4" />
@@ -221,8 +221,8 @@ export function OperationsList({ opType, title, description, showSupplier = fals
 
       {/* Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card w-full max-w-2xl rounded-2xl shadow-2xl border border-border flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card w-full max-w-2xl rounded-2xl shadow-2xl border border-border flex flex-col max-h-[90vh] ring-1 ring-black/5">
             {/* Header - Fixed top */}
             <div className="flex-none flex items-center justify-between px-6 py-5 border-b border-border">
               <h2 className="text-lg font-bold">New {title.replace(/s$/, "")}</h2>

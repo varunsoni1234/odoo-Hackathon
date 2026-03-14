@@ -195,7 +195,7 @@ export function Items() {
                 </tr>
               ) : (
                 filteredItems.map((item) => (
-                  <tr key={item.id} className="bg-card/20 border-b border-border/50 hover:bg-card/40 transition-colors">
+                  <tr key={item.id} className="bg-card/20 border-b border-border/50 hover:bg-card/40 card-hover transition-colors group">
                     <td className="px-6 py-4 font-mono text-xs text-foreground/70">{item.sku}</td>
                     <td className="px-6 py-4 font-medium">{item.name}</td>
                     <td className="px-6 py-4">
@@ -203,14 +203,14 @@ export function Items() {
                          {item.categories?.name || "Uncategorized"}
                        </span>
                     </td>
-                    <td className="px-6 py-4 text-right">${Number(item.price).toFixed(2)}</td>
+                    <td className="px-6 py-4 text-right font-semibold">${Number(item.price).toFixed(2)}</td>
                     <td className="px-6 py-4 text-right">
-                      <span className={`font-medium ${item.quantity <= item.min_stock_level ? "text-rose-500" : "text-emerald-500"}`}>
+                      <span className={`font-bold ${item.quantity <= item.min_stock_level ? "text-rose-500" : "text-emerald-500"}`}>
                         {item.quantity}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex justify-end gap-2 text-brand-500 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={() => openEditModal(item)}
                           className="p-1.5 text-foreground/60 hover:text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-md transition-colors"
@@ -234,8 +234,8 @@ export function Items() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
-          <div className="glass bg-card w-full max-w-xl rounded-xl shadow-2xl border border-border p-6 overflow-hidden slide-up">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card w-full max-w-xl rounded-xl shadow-2xl border border-border p-6 overflow-hidden slide-up ring-1 ring-black/5">
             <h2 className="text-xl font-bold mb-4">{isEditing ? "Edit Item" : "Add New Item"}</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">

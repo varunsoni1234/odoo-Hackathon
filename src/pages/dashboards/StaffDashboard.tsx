@@ -164,7 +164,7 @@ export function StaffDashboard() {
       </div>
 
       {/* Progress Banner */}
-      <div className="rounded-2xl border border-border bg-card p-5">
+      <div className="rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-sm font-semibold">Today's Progress</h3>
@@ -192,7 +192,7 @@ export function StaffDashboard() {
           { label: "Transfers", value: todayOps.transfers.length, color: "text-blue-500", bg: "bg-blue-500/10" },
           { label: "Adjustments", value: todayOps.adjustments.length, color: "text-purple-500", bg: "bg-purple-500/10" },
         ].map((s) => (
-          <div key={s.label} className={cn("rounded-xl p-4 border border-border", s.bg)}>
+          <div key={s.label} className={cn("rounded-xl p-4 border border-border card-hover", s.bg)}>
             <div className={cn("text-2xl font-bold", s.color)}>{s.value}</div>
             <div className="text-xs text-foreground/60 mt-0.5">{s.label}</div>
           </div>

@@ -46,14 +46,28 @@
 
 /* Glassmorphism */
 .glass {
-  background-color: rgb(255 255 255 / 0.75);
+  background-color: hsl(var(--card) / 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgb(255 255 255 / 0.3);
+  border: 1px solid hsl(var(--border) / 0.3);
 }
+
 .dark .glass {
-  background-color: rgb(15 20 40 / 0.7);
-  border: 1px solid rgb(255 255 255 / 0.07);
+  background-color: hsl(var(--card) / 0.8);
+  border: 1px solid hsl(var(--border) / 0.2);
+}
+
+/* Elegant Card Hover */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border-color: hsl(var(--brand-500) / 0.3);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
 }
 
 /* Animations */
