@@ -37,9 +37,23 @@ export function AuthPage() {
   // ── REGISTER ──
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault(); resetMessages(); setLoading(true);
-    const { error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } });
-    if (error) setError(error.message);
-    else { setSuccess("Account created! Please check your email to verify before logging in."); setView("login"); }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } }
+    });
+    if (error) {
+      setError(error.message);
+    } else if (data.user) {
+      // Manually insert profile as fallback (trigger may be blocked by RLS during signup)
+      await supabase.from("user_profiles").upsert({
+        id: data.user.id,
+        full_name: fullName,
+        role: "staff",
+      }, { onConflict: "id", ignoreDuplicates: true });
+      setSuccess("Account created! Check your email to verify before logging in.");
+      setView("login");
+    }
     setLoading(false);
   };
 
