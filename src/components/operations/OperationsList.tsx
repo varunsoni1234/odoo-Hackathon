@@ -221,8 +221,8 @@ export function OperationsList({ opType, title, description, showSupplier = fals
 
       {/* Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card w-full max-w-2xl rounded-2xl shadow-2xl border border-border flex flex-col max-h-[90vh] ring-1 ring-black/5">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl border border-border flex flex-col max-h-[90vh] ring-1 ring-black/10 overflow-hidden">
             {/* Header - Fixed top */}
             <div className="flex-none flex items-center justify-between px-6 py-5 border-b border-border">
               <h2 className="text-lg font-bold">New {title.replace(/s$/, "")}</h2>
@@ -336,8 +336,8 @@ export function OperationsList({ opType, title, description, showSupplier = fals
 
       {/* Detail Modal */}
       {isDetailOpen && selectedOp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card w-full max-w-xl rounded-2xl shadow-2xl border border-border overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-xl rounded-2xl shadow-2xl border border-border overflow-hidden max-h-[90vh] flex flex-col ring-1 ring-black/10">
             <div className="flex items-center justify-between px-6 py-5 border-b border-border">
               <div>
                 <h2 className="text-lg font-bold font-mono">{selectedOp.reference || "Draft"}</h2>

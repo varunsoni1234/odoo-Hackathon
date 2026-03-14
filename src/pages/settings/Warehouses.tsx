@@ -128,8 +128,8 @@ export function Warehouses() {
 
       {/* Warehouse Modal */}
       {whModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-card w-full max-w-md rounded-2xl shadow-2xl border border-border p-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-border p-6 ring-1 ring-black/10">
             <h2 className="text-lg font-bold mb-4">{editingWh ? "Edit Warehouse" : "Add Warehouse"}</h2>
             <form onSubmit={handleWhSubmit} className="space-y-4">
               <div><label className="block text-sm font-medium mb-1.5">Name *</label>
@@ -149,8 +149,8 @@ export function Warehouses() {
 
       {/* Location Modal */}
       {locModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-card w-full max-w-md rounded-2xl shadow-2xl border border-border p-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-2xl border border-border p-6 ring-1 ring-black/10">
             <h2 className="text-lg font-bold mb-4">{editingLoc ? "Edit Location" : "Add Location"}</h2>
             <form onSubmit={handleLocSubmit} className="space-y-4">
               <div><label className="block text-sm font-medium mb-1.5">Location Name *</label>
