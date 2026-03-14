@@ -238,8 +238,8 @@ export function Movements() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
-          <div className="glass bg-card w-full max-w-md rounded-xl shadow-2xl border border-border p-6 overflow-hidden slide-up">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-xl shadow-2xl border border-border p-6 overflow-hidden slide-up ring-1 ring-black/10">
             <h2 className="text-xl font-bold mb-4">Record Stock Movement</h2>
             
             <form onSubmit={handleSubmit} className="space-y-4">
