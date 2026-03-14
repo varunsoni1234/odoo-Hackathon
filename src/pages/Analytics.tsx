@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BarChart3, TrendingUp, TrendingDown, Package, Layers, Activity, Loader2 } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { supabase } from "../lib/supabase";
 
 export function Analytics() {
   const [loading, setLoading] = useState(true);
