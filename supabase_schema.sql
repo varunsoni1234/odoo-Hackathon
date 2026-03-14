@@ -1,7 +1,7 @@
--- Phase 2: Core IMS Schema Initialization
+-- Phase 2: Core IMS Schema Initialization (Idempotent Version)
 
 -- 1. Create Categories Table
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL UNIQUE,
   description TEXT,
@@ -9,7 +9,7 @@ CREATE TABLE categories (
 );
 
 -- 2. Create Items Table
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   sku TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
@@ -21,9 +21,13 @@ CREATE TABLE items (
 );
 
 -- 3. Create Movements Table
-CREATE TYPE movement_type AS ENUM ('IN', 'OUT', 'ADJUST');
+DO $$ BEGIN
+  CREATE TYPE movement_type AS ENUM ('IN', 'OUT', 'ADJUST');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
-CREATE TABLE movements (
+CREATE TABLE IF NOT EXISTS movements (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   item_id UUID REFERENCES items(id) ON DELETE CASCADE,
   type movement_type NOT NULL,
@@ -45,6 +49,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_update_item_quantity ON movements;
 CREATE TRIGGER trg_update_item_quantity
 AFTER INSERT ON movements
 FOR EACH ROW
@@ -55,14 +60,18 @@ ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE movements ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Enable read access for all users" ON categories FOR SELECT USING (true);
-CREATE POLICY "Enable insert access for all users" ON categories FOR INSERT WITH CHECK (true);
-CREATE POLICY "Enable update access for all users" ON categories FOR UPDATE USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Enable read access for all users" ON categories FOR SELECT USING (true);
+  CREATE POLICY "Enable insert access for all users" ON categories FOR INSERT WITH CHECK (true);
+  CREATE POLICY "Enable update access for all users" ON categories FOR UPDATE USING (true);
 
-CREATE POLICY "Enable read access for all users" ON items FOR SELECT USING (true);
-CREATE POLICY "Enable insert access for all users" ON items FOR INSERT WITH CHECK (true);
-CREATE POLICY "Enable update access for all users" ON items FOR UPDATE USING (true);
+  CREATE POLICY "Enable read access for all users" ON items FOR SELECT USING (true);
+  CREATE POLICY "Enable insert access for all users" ON items FOR INSERT WITH CHECK (true);
+  CREATE POLICY "Enable update access for all users" ON items FOR UPDATE USING (true);
 
-CREATE POLICY "Enable read access for all users" ON movements FOR SELECT USING (true);
-CREATE POLICY "Enable insert access for all users" ON movements FOR INSERT WITH CHECK (true);
-CREATE POLICY "Enable update access for all users" ON movements FOR UPDATE USING (true);
+  CREATE POLICY "Enable read access for all users" ON movements FOR SELECT USING (true);
+  CREATE POLICY "Enable insert access for all users" ON movements FOR INSERT WITH CHECK (true);
+  CREATE POLICY "Enable update access for all users" ON movements FOR UPDATE USING (true);
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
