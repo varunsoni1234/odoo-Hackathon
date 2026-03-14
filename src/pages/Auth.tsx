@@ -223,7 +223,7 @@ export function AuthPage() {
           {view === "otp" && (
             <form onSubmit={handleVerifyOtp} className="space-y-4">
               <p className="text-sm text-foreground/60 mb-2">
-                We sent a 6-digit OTP to <span className="font-semibold text-foreground">{email}</span>. Enter it below.
+                We sent an OTP code to <span className="font-semibold text-foreground">{email}</span>. Enter it below.
               </p>
               <div>
                 <label className="block text-sm font-medium mb-1.5">OTP Code</label>
@@ -232,11 +232,11 @@ export function AuthPage() {
                   <input
                     type="text"
                     required
-                    maxLength={6}
+                    maxLength={10}
                     placeholder="123456"
                     value={otp}
-                    onChange={e => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                    className={inputClass + " pl-10 tracking-[0.4em] font-mono text-lg text-center"}
+                    onChange={e => setOtp(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    className={inputClass + " pl-10 tracking-[0.2em] font-mono text-lg text-center"}
                   />
                 </div>
               </div>
