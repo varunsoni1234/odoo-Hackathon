@@ -148,6 +148,34 @@ export function Movements() {
     });
   };
 
+  const downloadCSV = () => {
+    if (movements.length === 0) return;
+
+    const headers = ["Date", "Item", "SKU", "Type", "Quantity", "Note"];
+    const rows = filteredMovements.map(m => [
+      formatDate(m.created_at),
+      m.items?.name || "Unknown",
+      m.items?.sku || "",
+      m.type,
+      m.quantity,
+      m.reference_note || ""
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `stock_ledger_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -157,13 +185,21 @@ export function Movements() {
             Record incoming stock, outgoing orders, and adjustments.
           </p>
         </div>
-        <button 
-          onClick={openAddModal}
-          className="px-4 py-2 rounded-md bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 flex items-center"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          New Movement
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={downloadCSV}
+            className="px-4 py-2 rounded-md border border-border bg-card text-sm font-medium hover:bg-card-foreground/5 transition-colors flex items-center"
+          >
+            Download Ledger
+          </button>
+          <button 
+            onClick={openAddModal}
+            className="px-4 py-2 rounded-md bg-brand-600 text-white text-sm font-medium hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20 flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Movement
+          </button>
+        </div>
       </div>
 
       <div className="glass rounded-xl shadow-sm border border-border overflow-hidden">

@@ -105,15 +105,84 @@ export function OperationsList({ opType, title, description, showSupplier = fals
   const handleValidate = async (op: OpWithRelations) => {
     if (!confirm(`Validate "${op.reference}"? This will permanently update stock levels.`)) return;
     
-    // Set done_qty = expected_qty for all lines first
-    const { data: opLinesData } = await supabase.from("operation_lines").select("*").eq("operation_id", op.id);
-    if (opLinesData && opLinesData.length > 0) {
-      await supabase.from("operation_lines").upsert(opLinesData.map(l => ({ ...l, done_qty: l.expected_qty })));
+    setLoading(true);
+    try {
+      // 1. Fetch all lines for this operation
+      const { data: lines, error: linesErr } = await supabase
+        .from("operation_lines")
+        .select("*")
+        .eq("operation_id", op.id);
+        
+      if (linesErr) throw linesErr;
+      if (!lines || lines.length === 0) {
+        alert("Cannot validate operation with no product lines.");
+        setLoading(false);
+        return;
+      }
+
+      // 2. Prepare movements based on operation type
+      const movements = lines.flatMap(line => {
+        const baseMovement = {
+          item_id: line.item_id,
+          reference_note: `${op.type}: ${op.reference}`,
+        };
+
+        if (op.type === "RECEIPT") {
+          return [{ ...baseMovement, type: "IN", quantity: line.expected_qty }];
+        } else if (op.type === "DELIVERY") {
+          return [{ ...baseMovement, type: "OUT", quantity: -Math.abs(line.expected_qty) }];
+        } else if (op.type === "INTERNAL") {
+          // Internal transfers log two moves: one OUT from source, one IN to destination
+          // But since our current 'items' table doesn't track location-specific quantity (only global),
+          // a simple INTERNAL move doesn't change global quantity. We log it for the ledger anyway.
+          return [
+            { ...baseMovement, type: "OUT", quantity: -Math.abs(line.expected_qty), reference_note: `${baseMovement.reference_note} (From ${op.source_location?.name})` },
+            { ...baseMovement, type: "IN", quantity: Math.abs(line.expected_qty), reference_note: `${baseMovement.reference_note} (To ${op.destination_location?.name})` }
+          ];
+        } else if (op.type === "ADJUSTMENT") {
+          // If expected_qty is positive, it's an increase, if negative, a decrease
+          return [{ ...baseMovement, type: "ADJUST", quantity: line.expected_qty }];
+        }
+        return [];
+      });
+
+      // 3. Insert movements and update lines in a pseudo-transaction via sequential calls
+      // (Supabase free tier doesn't support complex transactions easily from client)
+      
+      // Update all lines to reflect they were processed
+      const { error: linesUpdateErr } = await supabase
+        .from("operation_lines")
+        .update({ done_qty: 0 }) // Should ideally use something more advanced, but setting done_qty for record keeping
+        .eq("operation_id", op.id);
+      
+      // We'll actually set it to expected_qty to show it's completed
+      await supabase.from("operation_lines").update({ done_qty: 1 }).eq("operation_id", op.id); // Placeholder for batch update
+      
+      for (const line of lines) {
+        await supabase.from("operation_lines").update({ done_qty: line.expected_qty }).eq("id", line.id);
+      }
+
+      // 4. Insert movements into the ledger
+      const { error: moveErr } = await supabase.from("movements").insert(movements);
+      if (moveErr) throw moveErr;
+
+      // 5. Finally, set status to DONE
+      const { error: opErr } = await supabase
+        .from("operations")
+        .update({ status: "DONE", done_date: new Date().toISOString() })
+        .eq("id", op.id);
+        
+      if (opErr) throw opErr;
+
+      alert("Operation validated and stock levels updated!");
+      fetchAll();
+      if (isDetailOpen) setIsDetailOpen(false);
+    } catch (err: any) {
+      console.error("Validation error:", err);
+      alert("Error: " + err.message);
+    } finally {
+      setLoading(false);
     }
-    const { error } = await supabase.from("operations").update({ status: "DONE" }).eq("id", op.id);
-    if (error) { alert("Error: " + error.message); return; }
-    fetchAll();
-    if (isDetailOpen) setIsDetailOpen(false);
   };
 
   const handleCancel = async (op: OpWithRelations) => {
