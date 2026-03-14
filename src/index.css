@@ -1,41 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 220 30% 97%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
+    --card-foreground: 222 47% 11%;
+    --border: 220 15% 88%;
+    --brand-50: 224 100% 97%;
+    --brand-100: 224 100% 93%;
+    --brand-400: 224 82% 65%;
+    --brand-500: 224 76% 58%;
+    --brand-600: 224 72% 50%;
+    --brand-700: 224 72% 42%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 6.9%; /* slightly lighter than background */
-    --card-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
+    --background: 224 27% 9%;
+    --foreground: 218 33% 93%;
+    --card: 224 24% 12%;
+    --card-foreground: 218 33% 93%;
+    --border: 224 20% 20%;
   }
-}
 
-@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--foreground) / 0.25); }
 }
 
-/* Glassmorphism utility */
+/* Glassmorphism */
 .glass {
-  background-color: rgb(255 255 255 / 0.7);
-  backdrop-filter: blur(16px);
-  border-width: 1px;
-  border-color: rgb(255 255 255 / 0.2);
+  background-color: rgb(255 255 255 / 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgb(255 255 255 / 0.3);
+}
+.dark .glass {
+  background-color: rgb(15 20 40 / 0.7);
+  border: 1px solid rgb(255 255 255 / 0.07);
 }
 
-.dark .glass {
-  background-color: rgb(0 0 0 / 0.5);
-  border-color: rgb(255 255 255 / 0.1);
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+.slide-up {
+  animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+

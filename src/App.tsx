@@ -1,28 +1,73 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./providers/ThemeProvider";
+import { AuthProvider } from "./providers/AuthProvider";
 import { AppLayout } from "./components/layout/AppLayout";
-import { Dashboard } from "./pages/Dashboard";
+
+// Auth
 import { AuthPage } from "./pages/Auth";
+
+// Dashboards
+import { Dashboard } from "./pages/dashboards/Dashboard";
+
+// Products
+import { Items as Products } from "./pages/Items";
 import { Categories } from "./pages/Categories";
-import { Items } from "./pages/Items";
-import { Movements } from "./pages/Movements";
+import { Suppliers } from "./pages/products/Suppliers";
+
+// Operations
+import { Receipts } from "./pages/operations/Receipts";
+import { DeliveryOrders } from "./pages/operations/DeliveryOrders";
+import { InternalTransfers } from "./pages/operations/InternalTransfers";
+import { StockAdjustments } from "./pages/operations/StockAdjustments";
+
+// Reports
+import { MoveHistory } from "./pages/MoveHistory";
+
+// Settings
+import { Warehouses } from "./pages/settings/Warehouses";
+
+// Profile
+import { Profile } from "./pages/Profile";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="ims-theme">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/" element={<AppLayout />}>
-            <Route index element={<Dashboard />} />
-            {/* Mock routes for other sections */}
-            <Route path="inventory" element={<Items />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="movements" element={<Movements />} />
-            <Route path="settings" element={<div className="p-8 text-xl font-medium animate-fade-in text-foreground/50">App Settings</div>} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={<AppLayout />}>
+              {/* Dashboard */}
+              <Route index element={<Dashboard />} />
+
+              {/* Products */}
+              <Route path="products" element={<Products />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="suppliers" element={<Suppliers />} />
+
+              {/* Operations */}
+              <Route path="operations/receipts" element={<Receipts />} />
+              <Route path="operations/deliveries" element={<DeliveryOrders />} />
+              <Route path="operations/transfers" element={<InternalTransfers />} />
+              <Route path="operations/adjustments" element={<StockAdjustments />} />
+
+              {/* Reports */}
+              <Route path="history" element={<MoveHistory />} />
+              <Route path="analytics" element={<div className="p-8 text-foreground/50 text-xl font-medium">Analytics — Coming Soon</div>} />
+
+              {/* Settings */}
+              <Route path="settings/warehouses" element={<Warehouses />} />
+
+              {/* Profile */}
+              <Route path="profile" element={<Profile />} />
+
+              {/* Legacy redirect */}
+              <Route path="inventory" element={<Navigate to="/products" replace />} />
+              <Route path="movements" element={<Navigate to="/history" replace />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
