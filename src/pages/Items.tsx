@@ -271,7 +271,7 @@ export function Items() {
                 <select
                   id="category"
                   required
-                  value={currentItem.category_id}
+                  value={currentItem.category_id || ""}
                   onChange={(e) => setCurrentItem({...currentItem, category_id: e.target.value})}
                   className="w-full rounded-md border border-border bg-background/50 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
                 >
