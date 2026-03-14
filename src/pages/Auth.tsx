@@ -60,18 +60,19 @@ export function AuthPage() {
   // ── SEND OTP ──
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault(); resetMessages(); setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+    // Use resetPasswordForEmail to trigger the "Recovery" email template
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
     if (error) setError(error.message);
-    else { setSuccess(`OTP sent to ${email}. Enter the code below to reset your password.`); setView("otp"); }
+    else { setSuccess(`Recovery code sent to ${email}. Enter the 6-digit code below.`); setView("otp"); }
     setLoading(false);
   };
 
   // ── VERIFY OTP + SET NEW PASSWORD ──
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault(); resetMessages(); setLoading(true);
-    // Use type: 'magiclink' for OTPs sent via signInWithOtp
-    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "magiclink" });
-    if (error) { setError("Invalid or expired OTP. Please try again."); setLoading(false); return; }
+    // Use type: 'recovery' for codes sent via resetPasswordForEmail
+    const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: "recovery" });
+    if (error) { setError("Invalid or expired code. Please try again."); setLoading(false); return; }
     setView("new_password");
     setLoading(false);
   };
